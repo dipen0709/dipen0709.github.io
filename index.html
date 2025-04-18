@@ -264,11 +264,13 @@
       renderPlayerList(); // Re-render the player list with updated data
     }
 
+
     function rebalanceTeams() {
       const teamA = [];
       const teamB = [];
       let scoreA = 0;
       let scoreB = 0;
+ 
 
       PLAYER_MASTER.forEach((player, index) => {
         const checkbox = document.getElementById(player.id);
@@ -282,6 +284,12 @@
           }
         }
       });
+
+      if(teamA.length != teamB.length){
+        teamAList.innerHTML = '';
+        teamBList.innerHTML = '';
+        return;
+      }
 
       renderTeams(teamA, teamB, scoreA, scoreB);
     }
