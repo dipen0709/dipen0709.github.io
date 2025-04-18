@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Team Divider</title>
+  <title>Aristo Aalayam</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -135,8 +135,11 @@
     <button onclick="editWeights()">&nbsp ✏️ &nbsp</button>
   </div>
 
-  <button class="refresh-btn" onclick="rebalanceTeams()">🔄 Refresh Teams</button>
-
+  
+  <div class="teams">
+    <button class="refresh-btn" onclick="rebalanceTeams()">🔄 Refresh Teams</button>
+    <div >Total Players: <b class="weight-text" id="total_players">0</b></div>
+    </div>
   <div class="teams">
     <div class="team teamA">
       <h2>Team A</h2>
@@ -228,35 +231,94 @@
       const [name, bat, bowl, field] = p.data;
       return (bat * weights.batsman + bowl * weights.bowler + field * weights.fielder).toFixed(2);
     }
-
     function rebalanceTeams() {
+  
+  
       const selected = PLAYER_MASTER.filter(p => document.getElementById(p.id)?.checked);
       const scored = selected.map(p => ({ ...p, score: parseFloat(getPlayerScore(p)) }))
                             .sort((a, b) => b.score - a.score);
 
-      let teamA = [], teamB = [], totalA = 0, totalB = 0;
+      document.getElementById("total_players").innerHTML = scored.length;
 
-      scored.forEach(p => {
-        if (totalA <= totalB) {
-          teamA.push(p); totalA += p.score;
-        } else {
-          teamB.push(p); totalB += p.score;
-        }
-      });
-
-      console.log(teamA.length +":"+ teamB.length);
-      if(teamA.length != teamB.length){
-        teamAList.innerHTML = '';
-        teamBList.innerHTML = '';
+      // Ensure even number of players
+      if (scored.length % 2 !== 0 || scored.length < 4) {
+        document.getElementById("teamAList").innerHTML = "";
+        document.getElementById("teamBList").innerHTML = "";
+        document.getElementById("scoreA").textContent = 0;
+        document.getElementById("scoreB").textContent = 0;
         return;
       }
 
+    const player1 = scored[0];
+    const player2 = scored[1];
+    const player3 = scored[2];
+    const player4 = scored[3];
+    const lastPlayer = scored[scored.length - 1];
+
+    const teamA = [player1, player4];
+    const teamB = [player2, player3];
+    const middlePlayers = scored.slice(4, scored.length - 1);
+
+    for (let i = middlePlayers.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [middlePlayers[i], middlePlayers[j]] = [middlePlayers[j], middlePlayers[i]];
+  }
+
+  middlePlayers.forEach(p => {
+    const totalA = teamA.reduce((sum, x) => sum + x.score, 0);
+    const totalB = teamB.reduce((sum, x) => sum + x.score, 0);
+    if (teamA.length < scored.length / 2 && (totalA <= totalB || teamB.length >= scored.length / 2)) {
+      teamA.push(p);
+    } else {
+      teamB.push(p);
+    }
+  });
+
+  // Add the last player to Team A
+  teamA.push(lastPlayer);
+
+  // Rebalance if needed (while protecting fixed players)
+  const protectA = [player1.id, player4.id, lastPlayer.id];
+  const protectB = [player2.id, player3.id];
+
+  while (teamA.length > scored.length / 2) {
+    const index = teamA.findLastIndex(p => !protectA.includes(p.id));
+    if (index === -1) break; // No movable players left
+    const moved = teamA.splice(index, 1)[0];
+    teamB.push(moved);
+  }
+
+  while (teamB.length > scored.length / 2) {
+    const index = teamB.findLastIndex(p => !protectB.includes(p.id));
+    if (index === -1) break; // No movable players left
+    const moved = teamB.splice(index, 1)[0];
+    teamA.push(moved);
+  }
+  
+      console.log(teamA.length +":"+ teamB.length)
+      // if(teamA.length != teamB.length) {
+      //   document.getElementById("teamAList").innerHTML = "";
+      //   document.getElementById("teamBList").innerHTML = "";
+      //   document.getElementById("scoreA").textContent = 0;
+      //   document.getElementById("scoreB").textContent = 0;
+      //   return;
+      // }
+      // Final team score calculation
+      const totalA = teamA.reduce((sum, p) => sum + p.score, 0);
+      const totalB = teamB.reduce((sum, p) => sum + p.score, 0);
+
+      // Render to DOM
       document.getElementById("teamAList").innerHTML = teamA.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
       document.getElementById("teamBList").innerHTML = teamB.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
+
       document.getElementById("scoreA").textContent = totalA.toFixed(2);
       document.getElementById("scoreB").textContent = totalB.toFixed(2);
-    }
 
+      console.log("Team A:", teamA);
+      console.log("Team B:", teamB);
+  }
+
+ 
     function renderPlayerList() {
       const list = document.getElementById("playerList");
       list.innerHTML = "";
