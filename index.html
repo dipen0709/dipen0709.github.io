@@ -49,7 +49,7 @@
       color: white;
       border: none;
       border-radius: 3px;
-      font-size: 10px;
+      font-size: 8px;
       padding: 1px 4px;
       cursor: pointer;
     }
@@ -196,128 +196,86 @@
       if (!isNaN(newField)) weights.fielder = newField;
 
       updateWeightDisplay();
-      updateTeams();
+      rebalanceTeams();
     }
 
     function addNewPlayer() {
-      const playerName = prompt("Enter player name:");
-      if (!playerName) return;
-
-      const battingScore = parseInt(prompt("Enter batting score (0–10):"));
-      const bowlingScore = parseInt(prompt("Enter bowling score (0–10):"));
-      const fieldingScore = parseInt(prompt("Enter fielding score (0–10):"));
-
-      if (isNaN(battingScore) || isNaN(bowlingScore) || isNaN(fieldingScore)) {
-        alert("Invalid input. Please enter valid scores.");
-        return;
-      }
-
-      const newId = PLAYER_MASTER.length + 1;
-      PLAYER_MASTER.push({
-        id: newId,
-        data: [playerName, battingScore, bowlingScore, fieldingScore],
-      });
-
-      renderPlayerList(); // Re-render player list with the new player
-      updateTeams(); // Recalculate and update the teams
+      const name = prompt("Player name:");
+      const bat = parseInt(prompt("Batting score (0–10):"));
+      const bowl = parseInt(prompt("Bowling score (0–10):"));
+      const field = parseInt(prompt("Fielding score (0–10):"));
+      if (!name || isNaN(bat) || isNaN(bowl) || isNaN(field)) return alert("Invalid input!");
+      const id = PLAYER_MASTER.length + 1;
+      PLAYER_MASTER.push({ id, data: [name, bat, bowl, field] });
+      renderPlayerList();
     }
 
-    function renderPlayerList() {
-      const playerListDiv = document.getElementById("playerList");
-      playerListDiv.innerHTML = '';  // Clear existing list
-
-      PLAYER_MASTER.forEach((p) => {
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.id = p.id;
-        checkbox.addEventListener("change", () => rebalanceTeams());
-
-        const label = document.createElement("label");
-        label.htmlFor = p.id;
-        label.textContent = `${p.data[0]} (${p.data[1]},${p.data[2]},${p.data[3]})`;
-
-        const button = document.createElement("button");
-        button.classList.add("edit-btn");
-        button.textContent = "✏️";
-        button.onclick = () => editPlayer(p.id);
-
-        const playerItem = document.createElement("div");
-        playerItem.classList.add("player-item");
-        playerItem.appendChild(checkbox);
-        playerItem.appendChild(label);
-        playerItem.appendChild(button);
-
-        playerListDiv.appendChild(playerItem);
-      });
+    function editPlayer(id) {
+      const player = PLAYER_MASTER.find(p => p.id === id);
+      if (!player) return;
+      const [name, bat, bowl, field] = player.data;
+      const newName = prompt("Name:", name);
+      const newBat = parseInt(prompt("Batting score:", bat));
+      const newBowl = parseInt(prompt("Bowling score:", bowl));
+      const newField = parseInt(prompt("Fielding score:", field));
+      if (!newName || isNaN(newBat) || isNaN(newBowl) || isNaN(newField)) return;
+      player.data = [newName, newBat, newBowl, newField];
+      renderPlayerList();
+      rebalanceTeams();
     }
 
-    function editPlayer(playerId) {
-      const player = PLAYER_MASTER.find((p) => p.id === playerId);
-      const newBat = prompt("Edit Batting Score:", player.data[1]);
-      const newBowl = prompt("Edit Bowling Score:", player.data[2]);
-      const newField = prompt("Edit Fielding Score:", player.data[3]);
-
-      if (newBat !== null) player.data[1] = parseInt(newBat);
-      if (newBowl !== null) player.data[2] = parseInt(newBowl);
-      if (newField !== null) player.data[3] = parseInt(newField);
-
-      renderPlayerList(); // Re-render the player list with updated data
+    function getPlayerScore(p) {
+      const [name, bat, bowl, field] = p.data;
+      return (bat * weights.batsman + bowl * weights.bowler + field * weights.fielder).toFixed(2);
     }
-
 
     function rebalanceTeams() {
-      const teamA = [];
-      const teamB = [];
-      let scoreA = 0;
-      let scoreB = 0;
- 
+      const selected = PLAYER_MASTER.filter(p => document.getElementById(p.id)?.checked);
+      const scored = selected.map(p => ({ ...p, score: parseFloat(getPlayerScore(p)) }))
+                            .sort((a, b) => b.score - a.score);
 
-      PLAYER_MASTER.forEach((player, index) => {
-        const checkbox = document.getElementById(player.id);
-        if (checkbox.checked) {
-          if (index % 2 === 0) {
-            teamA.push(player);
-            scoreA += player.data[1] * weights.batsman + player.data[2] * weights.bowler + player.data[3] * weights.fielder;
-          } else {
-            teamB.push(player);
-            scoreB += player.data[1] * weights.batsman + player.data[2] * weights.bowler + player.data[3] * weights.fielder;
-          }
+      let teamA = [], teamB = [], totalA = 0, totalB = 0;
+
+      scored.forEach(p => {
+        if (totalA <= totalB) {
+          teamA.push(p); totalA += p.score;
+        } else {
+          teamB.push(p); totalB += p.score;
         }
       });
 
+      console.log(teamA.length +":"+ teamB.length);
       if(teamA.length != teamB.length){
         teamAList.innerHTML = '';
         teamBList.innerHTML = '';
         return;
       }
 
-      renderTeams(teamA, teamB, scoreA, scoreB);
+      document.getElementById("teamAList").innerHTML = teamA.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
+      document.getElementById("teamBList").innerHTML = teamB.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
+      document.getElementById("scoreA").textContent = totalA.toFixed(2);
+      document.getElementById("scoreB").textContent = totalB.toFixed(2);
     }
 
-    function renderTeams(teamA, teamB, scoreA, scoreB) {
-      const teamAList = document.getElementById("teamAList");
-      const teamBList = document.getElementById("teamBList");
-
-      teamAList.innerHTML = '';
-      teamBList.innerHTML = '';
-
-      teamA.forEach((player) => {
-        const li = document.createElement("li");
-        li.textContent = `${player.data[0]} - Score: ${(player.data[1] * weights.batsman + player.data[2] * weights.bowler + player.data[3] * weights.fielder).toFixed(2)}`;
-        teamAList.appendChild(li);
+    function renderPlayerList() {
+      const list = document.getElementById("playerList");
+      list.innerHTML = "";
+      PLAYER_MASTER.forEach(p => {
+        const div = document.createElement("div");
+       const sc =  getPlayerScore(p);
+        div.className = "player-item";
+        div.innerHTML = `
+          <input type="checkbox" id="${p.id}" onchange="rebalanceTeams()" />
+          <label for="${p.id}">${p.data[0]} (${p.data.slice(1).join(",")}) - ${sc}</label>
+          <button class="edit-btn" onclick="editPlayer(${p.id})">✏️</button>
+        `;
+        list.appendChild(div);
       });
-
-      teamB.forEach((player) => {
-        const li = document.createElement("li");
-        li.textContent = `${player.data[0]} - Score: ${(player.data[1] * weights.batsman + player.data[2] * weights.bowler + player.data[3] * weights.fielder).toFixed(2)}`;
-        teamBList.appendChild(li);
-      });
-
-      document.getElementById("scoreA").textContent = scoreA.toFixed(2);
-      document.getElementById("scoreB").textContent = scoreB.toFixed(2);
     }
 
-    renderPlayerList(); // Initial rendering
+    renderPlayerList();
+    updateWeightDisplay();
   </script>
 </body>
 </html>
+  
