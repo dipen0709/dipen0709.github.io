@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Aristo Aalayam</title>
-  
+  <link rel="icon" type="image/png" href="favicon.png">
   <style>
     body {
        font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-      background: url('logo.jpg') no-repeat center center fixed;
+      background: url('logo.jpeg') no-repeat center center fixed;
       background-size: cover;
     
       font-size: 12px;
@@ -18,7 +18,7 @@
     }
     h2 {
       color: whitesmoke;
-      font-size: 14px;
+      font-size: 16px;
       margin: 10px 0 5px;
       display: flex;
       justify-content: space-between;
@@ -27,7 +27,7 @@
     h3 {
       color: #3d3333;
       font-size: 14px;
-      margin: 10px 0 5px;
+      margin: 5px 0 5px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -55,6 +55,7 @@
     .player-item input[type="checkbox"] {
       margin-right: 4px;
       transform: scale(0.9);
+      accent-color: #139830;
     }
     .edit-btn {
       background: none;
@@ -79,7 +80,7 @@
       flex: 1;
     }
     .teamA { border-left: 3px solid #28a745; }
-    .teamB { border-left: 3px solid #dc3545; }
+    .teamB { border-left: 3px solid #28a745; }
     .score {
       font-weight: bold;
       font-size: 11px;
@@ -88,20 +89,20 @@
     ul {
       margin: 4px 0;
       padding-left: 15px;
-      color: blueviolet;
+      color: #139830;
     }
     li {
       margin: 2px 0;
     }
     .refresh-btn {
-      margin-bottom: 10px;
-      background: #b63fe3;
-      color: #000;
+      background: #139830;
+      color: #fff;
       border: none;
       padding: 6px 10px;
       font-size: 12px;
       border-radius: 6px;
       cursor: pointer;
+      float: right;
     }
     .weight-info {
       margin: 8px 0 6px;
@@ -113,7 +114,7 @@
     .weight-info span {
       font-weight: bold;
     }
-    .weight-info button {
+    .weight-info .weight-edit {
       background: none;
       color: white;
       border: none;
@@ -126,7 +127,7 @@
       color: whitesmoke;;
     }
     .plus-btn {
-      background: #6767e2;
+      background: #139830;
       color: white;
       border: none;
       padding: 3px 6px 2px 6px;
@@ -134,26 +135,36 @@
       cursor: pointer;
       font-size: 16px;
     }
+    .green-checkbox {
+    /* width: 18px;
+    height: 18px; */
+    accent-color: #139830; /* Bootstrap green */
+    cursor: pointer;
+  }
   </style>
 </head>
 <body>
   <h2>
-    Aristo Aalayam
+    Aristo Aalayam Turf Cricket
+    <div style="text-align: right; font-weight: 400;">Players: <span class="weight-text" id="total_players">0</span></div> 
     <button class="plus-btn" onclick="addNewPlayer()">+</button>
   </h2>
-  <div class="player-list" id="playerList"></div>
+  <div class="player-list" id="playerList" style="margin-top: 10px;"></div>
 
-  <div class="weight-info">
-    <span><span class="weight-text" id="batW">Bat: 1.00</span>, <span class="weight-text" id="bowlW">Bowl: 0.85</span>, <span class="weight-text" id="fieldW">Field: 0.70</span></span>
-    <button onclick="editWeights()">&nbsp ✏️ &nbsp</button>
-  </div>
+  <div class="weight-info"  >
+    <span><span class="weight-text" id="batW">Bat: 1.00</span>, <span class="weight-text" id="bowlW">Bowl: 0.85</span>, <span class="weight-text" id="fieldW">Field: 0.6</span></span>
+    <button class="weight-edit" onclick="editWeights()">&nbsp <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#28a745" viewBox="0 0 24 24">
+  <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L15.13 4.88l3.75 3.75 1.83-1.83z"/>
+</svg> &nbsp</button>
 
-  
-  <div class="teams">
-    <button class="refresh-btn" onclick="rebalanceTeams()">Refresh</button>
-    <div >Total Players: <b class="weight-text" id="total_players">0</b></div>
-    </div>
-  <div class="teams">
+<div class="teams">
+  <button class="refresh-btn" onclick="rebalanceTeams()">Refresh</button>
+</div>
+
+</div>
+
+   
+  <div class="teams" style="margin-top: 10px;">
     <div class="team teamA">
       <h3>Team A</h3>
       <ul id="teamAList"></ul>
@@ -167,7 +178,7 @@
   </div>
 
   <script>
-    let weights = { batsman: 1, bowler: 0.85, fielder: 0.7 };
+    let weights = { batsman: 1, bowler: 0.85, fielder: 0.6 };
 
     let PLAYER_MASTER = [
       { id: 1, data: ["Dipen", 10, 9, 9] },
@@ -327,9 +338,12 @@
        const sc =  getPlayerScore(p);
         div.className = "player-item";
         div.innerHTML = `
-          <input type="checkbox" id="${p.id}" onchange="rebalanceTeams()" />
-          <label for="${p.id}">${p.data[0]} (${p.data.slice(1).join(",")}) - ${sc}</label>
-          <button class="edit-btn" onclick="editPlayer(${p.id})">✏️</button>
+          <input type="checkbox" class="green-checkbox"  id="${p.id}" onchange="rebalanceTeams()" />
+          <label for="${p.id}">${p.data[0]} (${p.data.slice(1).join(",")},${sc})</label>
+          <button class="edit-btn" onclick="editPlayer(${p.id})"><span style="color: #28a745;"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#28a745" viewBox="0 0 24 24">
+  <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L15.13 4.88l3.75 3.75 1.83-1.83z"/>
+</svg>
+</span></button>
         `;
         list.appendChild(div);
       });
@@ -338,6 +352,7 @@
     renderPlayerList();
     updateWeightDisplay();
   </script>
+  <footer style="margin-top: 20px; font-size: 14px; color: white; font-weight: 500; text-align: right;">© Aristo Aalayam 2025 ®</footer>
 </body>
 </html>
   
