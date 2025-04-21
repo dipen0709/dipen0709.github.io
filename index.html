@@ -317,8 +317,16 @@
     teamA.push(moved);
   }
 
+  teamA.sort((a, b) => b.score - a.score);
+  teamB.sort((a, b) => b.score - a.score);
+
+
   const totalA = teamA.reduce((sum, p) => sum + p.score, 0);
   const totalB = teamB.reduce((sum, p) => sum + p.score, 0);
+
+
+  console.log("Team A:", teamA);
+  // console.log("Team B:", teamB);
 
   document.getElementById("teamAList").innerHTML = teamA.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
   document.getElementById("teamBList").innerHTML = teamB.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
