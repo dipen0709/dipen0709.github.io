@@ -181,7 +181,7 @@
     let weights = { batsman: 1, bowler: 0.8, fielder: 0.6 };
 
     let PLAYER_MASTER = [
-      { id: 1, data: ["Dipen", 9, 9, 9] },
+      { id: 1, data: ["Dipen", 10, 9, 9] },
       { id: 2, data: ["Vivek", 10, 9, 9] },
       { id: 3, data: ["Dhruv", 9, 8, 9] },
       { id: 4, data: ["Prakshal", 9, 8, 8] },
@@ -277,10 +277,10 @@
   const player3 = scored[2];
   const player4 = scored[3];
 
-  const teamA = [player1, player4];
-  const teamB = [player2, player3];
+  const teamA = [player1];
+  const teamB = [player2];
 
-  const middlePlayers = scored.slice(4); // includes lastPlayer now
+  const middlePlayers = scored.slice(2); // includes lastPlayer now
 
   // Shuffle middle players
   for (let i = middlePlayers.length - 1; i > 0; i--) {
