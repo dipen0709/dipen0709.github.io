@@ -8,12 +8,13 @@
   <style>
     body {
        font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-      background: url('logo.jpeg') no-repeat center center fixed;
+      background: url('logo2.jpeg') no-repeat center center fixed;
       background-size: cover;
-    
+     
       font-size: 12px;
       margin: 10px;
-      background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+      /* background-color: black; */
+      /* background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1)); */
       color: #fff;
     }
     h2 {
@@ -55,7 +56,7 @@
     .player-item input[type="checkbox"] {
       margin-right: 4px;
       transform: scale(0.9);
-      accent-color: darkorange;
+      accent-color: #139830;
     }
     .edit-btn {
       background: none;
@@ -79,8 +80,8 @@
       font-size: 12px;
       flex: 1;
     }
-    .teamA { border-left: 3px solid darkorange; }
-    .teamB { border-left: 3px solid darkorange; }
+    .teamA { border-left: 3px solid #28a745; }
+    .teamB { border-left: 3px solid #28a745; }
     .score {
       font-weight: bold;
       font-size: 11px;
@@ -89,13 +90,13 @@
     ul {
       margin: 4px 0;
       padding-left: 15px;
-      color: darkorange;
+      color: #139830;
     }
     li {
       margin: 2px 0;
     }
     .refresh-btn {
-      background: darkorange;
+      background: #139830;
       color: #fff;
       border: none;
       padding: 6px 10px;
@@ -127,7 +128,7 @@
       color: whitesmoke;;
     }
     .plus-btn {
-      background: darkorange;
+      background: #139830;
       color: white;
       border: none;
       padding: 4px 8px;
@@ -138,7 +139,7 @@
     .green-checkbox {
     /* width: 18px;
     height: 18px; */
-    accent-color: darkorange; /* Bootstrap green */
+    accent-color: #139830; /* Bootstrap green */
     cursor: pointer;
   }
   </style>
@@ -152,10 +153,10 @@
   <div class="player-list" id="playerList" style="margin-top: 10px;"></div>
 
   <div class="weight-info"  >
-    <span><span class="weight-text" id="batW">Bat: 1.00</span>, <span class="weight-text" id="bowlW">Bowl: 0.85</span>, <span class="weight-text" id="fieldW">Field: 0.6</span></span>
-    <button class="weight-edit" onclick="editWeights()">&nbsp  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#FFA500" viewBox="0 0 24 24">
-      <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L15.13 4.88l3.75 3.75 1.83-1.83z"/>
-    </svg> &nbsp</button>
+    <span><span class="weight-text" id="batW">Bat: 1.00</span>, <span class="weight-text" id="bowlW">Bowl: 0.85</span>, <span class="weight-text" id="fieldW">Field: 0.5</span></span>
+    <button class="weight-edit" onclick="editWeights()">&nbsp <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#28a745" viewBox="0 0 24 24">
+  <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L15.13 4.88l3.75 3.75 1.83-1.83z"/>
+</svg> &nbsp</button>
 
 <div class="teams">
   <button class="refresh-btn" onclick="rebalanceTeams()">Refresh</button>
@@ -178,12 +179,12 @@
   </div>
 
   <script>
-    let weights = { batsman: 1, bowler: 0.8, fielder: 0.6 };
+    let weights = { batsman: 1, bowler: 0.8, fielder: 0.5 };
 
     let PLAYER_MASTER = [
       { id: 1, data: ["Dipen", 10, 9, 9] },
       { id: 2, data: ["Vivek", 10, 9, 9] },
-      { id: 3, data: ["Dhruv", 9, 8, 9] },
+      { id: 3, data: ["Dhruv", 10, 8, 9] },
       { id: 4, data: ["Prakshal", 9, 8, 8] },
       { id: 5, data: ["Ayush", 8, 9, 9] },
       { id: 6, data: ["Punyesh", 8, 8, 10] },
@@ -191,22 +192,23 @@
       { id: 8, data: ["Sanyam", 8, 8, 8] },
       { id: 9, data: ["Nisarg", 7, 8, 8] },
       { id: 10, data: ["Keval", 7, 8, 8] },
-      { id: 11, data: ["Akash", 6, 9, 5] },
-      { id: 12, data: ["Mihir", 7, 7, 9] },
+      { id: 11, data: ["Akash", 7, 9, 6] },
+      { id: 12, data: ["Mihir", 7, 7, 8] },
       { id: 13, data: ["Nayan", 6, 8, 7] },
       { id: 14, data: ["Pratik", 6, 8, 8] },
-      { id: 15, data: ["Yug", 7, 6, 8] },
+      { id: 15, data: ["Yug", 7, 7, 8] },
       { id: 16, data: ["Bhavesh", 6, 4, 7] },
-      { id: 17, data: ["Shubham", 6, 5, 7] },
+      { id: 17, data: ["Shubham", 6, 5, 6] },
       { id: 18, data: ["Deval", 6, 5, 6] },
       { id: 19, data: ["Jaymin", 6, 6, 7] },
-      { id: 20, data: ["Bharat", 6, 0, 5] },
-      { id: 21, data: ["Amit", 5, 0, 6] },
-      { id: 22, data: ["Harsh", 5, 0, 5] },
+      { id: 20, data: ["Bharat", 7, 0, 5] },
+      { id: 21, data: ["Amit", 6, 0, 6] },
+      { id: 22, data: ["Harsh", 6, 0, 5] },
       { id: 23, data: ["Kishan", 5, 0, 5] },
       { id: 24, data: ["Priyank", 5, 0, 6] },
-      { id: 25, data: ["Meet", 2, 0, 4] },
+      { id: 25, data: ["Meet", 3, 0, 4] },
     ];
+
 
     function updateWeightDisplay() {
       document.getElementById("batW").textContent = `Bat: ${weights.batsman.toFixed(2)}`;
@@ -276,10 +278,10 @@
   const player3 = scored[2];
   const player4 = scored[3];
 
-  const teamA = [player1, player4];
-  const teamB = [player2, player3];
+  const teamA = [player1];
+  const teamB = [player2];
 
-  const middlePlayers = scored.slice(4); // includes lastPlayer now
+  const middlePlayers = scored.slice(2); // includes lastPlayer now
 
   // Shuffle middle players
   for (let i = middlePlayers.length - 1; i > 0; i--) {
@@ -316,8 +318,16 @@
     teamA.push(moved);
   }
 
+  teamA.sort((a, b) => b.score - a.score);
+  teamB.sort((a, b) => b.score - a.score);
+
+
   const totalA = teamA.reduce((sum, p) => sum + p.score, 0);
   const totalB = teamB.reduce((sum, p) => sum + p.score, 0);
+
+
+  console.log("Team A:", teamA);
+  // console.log("Team B:", teamB);
 
   document.getElementById("teamAList").innerHTML = teamA.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
   document.getElementById("teamBList").innerHTML = teamB.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
@@ -334,17 +344,26 @@
     function renderPlayerList() {
       const list = document.getElementById("playerList");
       list.innerHTML = "";
-      PLAYER_MASTER.forEach(p => {
+
+       const scoredPlayers = PLAYER_MASTER.map(p => ({
+    ...p,
+    score: parseFloat(getPlayerScore(p))
+  }));
+
+  // Sort descending by score
+  scoredPlayers.sort((a, b) => b.score - a.score);
+
+
+      scoredPlayers.forEach(p => {
         const div = document.createElement("div");
        const sc =  getPlayerScore(p);
         div.className = "player-item";
         div.innerHTML = `
           <input type="checkbox" class="green-checkbox"  id="${p.id}" onchange="rebalanceTeams()" />
-          <label for="${p.id}" style="font-size:11px" >${p.data[0]} (${p.data.slice(1).join(",")},${sc})</label>
-          <button class="edit-btn" onclick="editPlayer(${p.id})"><span style="color: darkorange;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#FFA500" viewBox="0 0 24 24">
-    <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L15.13 4.88l3.75 3.75 1.83-1.83z"/>
-  </svg>
+          <label for="${p.id}">${p.data[0]} (${p.data.slice(1).join(",")},${sc})</label>
+          <button class="edit-btn" onclick="editPlayer(${p.id})"><span style="color: #28a745;"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#28a745" viewBox="0 0 24 24">
+  <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L15.13 4.88l3.75 3.75 1.83-1.83z"/>
+</svg>
 </span></button>
         `;
         list.appendChild(div);

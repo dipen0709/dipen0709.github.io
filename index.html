@@ -8,12 +8,13 @@
   <style>
     body {
        font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-      background: url('logo.jpeg') no-repeat center center fixed;
+      background: url('logo2.jpeg') no-repeat center center fixed;
       background-size: cover;
-    
+     
       font-size: 12px;
       margin: 10px;
-      background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+      /* background-color: black; */
+      /* background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1)); */
       color: #fff;
     }
     h2 {
@@ -152,7 +153,7 @@
   <div class="player-list" id="playerList" style="margin-top: 10px;"></div>
 
   <div class="weight-info"  >
-    <span><span class="weight-text" id="batW">Bat: 1.00</span>, <span class="weight-text" id="bowlW">Bowl: 0.85</span>, <span class="weight-text" id="fieldW">Field: 0.6</span></span>
+    <span><span class="weight-text" id="batW">Bat: 1.00</span>, <span class="weight-text" id="bowlW">Bowl: 0.85</span>, <span class="weight-text" id="fieldW">Field: 0.5</span></span>
     <button class="weight-edit" onclick="editWeights()">&nbsp <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#28a745" viewBox="0 0 24 24">
   <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L15.13 4.88l3.75 3.75 1.83-1.83z"/>
 </svg> &nbsp</button>
@@ -178,7 +179,7 @@
   </div>
 
   <script>
-    let weights = { batsman: 1, bowler: 0.8, fielder: 0.6 };
+    let weights = { batsman: 1, bowler: 0.8, fielder: 0.5 };
 
     let PLAYER_MASTER = [
       { id: 1, data: ["Dipen", 10, 9, 9] },
@@ -192,7 +193,7 @@
       { id: 9, data: ["Nisarg", 7, 8, 8] },
       { id: 10, data: ["Keval", 7, 8, 8] },
       { id: 11, data: ["Akash", 7, 9, 6] },
-      { id: 12, data: ["Mihir", 7, 7, 9] },
+      { id: 12, data: ["Mihir", 7, 7, 8] },
       { id: 13, data: ["Nayan", 6, 8, 7] },
       { id: 14, data: ["Pratik", 6, 8, 8] },
       { id: 15, data: ["Yug", 7, 7, 8] },
@@ -343,7 +344,17 @@
     function renderPlayerList() {
       const list = document.getElementById("playerList");
       list.innerHTML = "";
-      PLAYER_MASTER.forEach(p => {
+
+       const scoredPlayers = PLAYER_MASTER.map(p => ({
+    ...p,
+    score: parseFloat(getPlayerScore(p))
+  }));
+
+  // Sort descending by score
+  scoredPlayers.sort((a, b) => b.score - a.score);
+
+
+      scoredPlayers.forEach(p => {
         const div = document.createElement("div");
        const sc =  getPlayerScore(p);
         div.className = "player-item";
