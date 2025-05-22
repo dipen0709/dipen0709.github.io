@@ -316,18 +316,42 @@
   teamA.sort((a, b) => b.score - a.score);
   teamB.sort((a, b) => b.score - a.score);
 
+  const teamABowlers8 = teamA.filter(p => p.bowling >= 8).length;
+  const teamBBowlers8 = teamB.filter(p => p.bowling >= 8).length;
+
+  if (teamABowlers8 < 3 || teamBBowlers8 < 3) {
+    document.getElementById("teamAList").innerHTML = "";
+    document.getElementById("teamBList").innerHTML = "";
+    document.getElementById("scoreA").textContent = 0;
+    document.getElementById("scoreB").textContent = 0;
+    console.log("Both teams must have at least 3 players with Bowling ≥ 8.");
+    return;
+  }
+
+
   const totalA = teamA.reduce((sum, p) => sum + p.score, 0);
   const totalB = teamB.reduce((sum, p) => sum + p.score, 0);
 
-  document.getElementById("teamAList").innerHTML = teamA.map(p => {
-  const highlight = p.bowling >= 7 ? ' style="color:darkgreen; font-weight:bold;"' : "";
+ document.getElementById("teamAList").innerHTML = teamA.map(p => {
+  let highlight = '';
+  if (p.bowling >= 8) {
+    highlight = ' style="color:darkgreen; font-weight:bold;"';
+  } else if (p.bowling === 7) {
+    highlight = ' style="color:orange; font-weight:bold;"';
+  }
   return `<li${highlight}>${p.data[0]} (${p.score})</li>`;
 }).join("");
 
 document.getElementById("teamBList").innerHTML = teamB.map(p => {
-  const highlight = p.bowling >= 7 ? ' style="color:darkgreen; font-weight:bold;"' : "";
+  let highlight = '';
+  if (p.bowling >= 8) {
+    highlight = ' style="color:darkgreen; font-weight:bold;"';
+  } else if (p.bowling === 7) {
+    highlight = ' style="color:orange; font-weight:bold;"';
+  }
   return `<li${highlight}>${p.data[0]} (${p.score})</li>`;
 }).join("");
+
 
 
   document.getElementById("scoreA").textContent = totalA.toFixed(2);
