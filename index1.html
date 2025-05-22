@@ -190,7 +190,7 @@
       { id: 6, data: ["Punyesh", 8, 8, 10] },
       { id: 7, data: ["Dhaval", 8, 9, 7] },
       { id: 8, data: ["Sanyam", 8, 8, 8] },
-      { id: 9, data: ["Nisarg", 7, 8, 8] },
+      { id: 9, data: ["Nisarg", 7, 7, 8] },
       { id: 10, data: ["Keval", 7, 8, 8] },
       { id: 11, data: ["Akash", 7, 9, 6] },
       { id: 12, data: ["Mihir", 7, 7, 8] },
@@ -258,39 +258,49 @@
       const [name, bat, bowl, field] = p.data;
       return (bat * weights.batsman + bowl * weights.bowler + field * weights.fielder).toFixed(2);
     }
-    function rebalanceTeams() {
+  function rebalanceTeams() {
   const selected = PLAYER_MASTER.filter(p => document.getElementById(p.id)?.checked);
-  const scored = selected.map(p => ({ ...p, score: parseFloat(getPlayerScore(p)) }))
-                        .sort((a, b) => b.score - a.score);
+  const scored = selected.map(p => ({
+    ...p,
+    score: parseFloat(getPlayerScore(p)),
+    bowling: p.data[2]  // for bowling skill
+  })).sort((a, b) => b.score - a.score);
 
   document.getElementById("total_players").innerHTML = scored.length;
 
-  if (scored.length % 2 !== 0 || scored.length < 4) {
+  if (scored.length % 2 !== 0 || scored.length < 8) {
     document.getElementById("teamAList").innerHTML = "";
     document.getElementById("teamBList").innerHTML = "";
     document.getElementById("scoreA").textContent = 0;
     document.getElementById("scoreB").textContent = 0;
+    return alert("Even number of players (min 8) required.");
+  }
+
+  const bowlers = scored.filter(p => p.bowling >= 7);
+  if (bowlers.length < 8) {
+    alert("At least 8 players with Bowling ≥ 7 required.");
     return;
   }
 
-  const player1 = scored[0];
-  const player2 = scored[1];
-  const player3 = scored[2];
-  const player4 = scored[3];
+  const teamA = [];
+  const teamB = [];
 
-  const teamA = [player1];
-  const teamB = [player2];
+  // Assign 4 bowlers to each team
+  const shuffledBowlers = [...bowlers].sort(() => Math.random() - 0.5);
+  for (let i = 0; i < 4; i++) teamA.push(shuffledBowlers[i]);
+  for (let i = 4; i < 8; i++) teamB.push(shuffledBowlers[i]);
 
-  const middlePlayers = scored.slice(2); // includes lastPlayer now
+  // Create a new list excluding already assigned bowlers
+  const assignedIDs = new Set([...teamA, ...teamB].map(p => p.id));
+  const rest = scored.filter(p => !assignedIDs.has(p.id));
 
-  // Shuffle middle players
-  for (let i = middlePlayers.length - 1; i > 0; i--) {
+  // Shuffle and assign rest of the players
+  for (let i = rest.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [middlePlayers[i], middlePlayers[j]] = [middlePlayers[j], middlePlayers[i]];
+    [rest[i], rest[j]] = [rest[j], rest[i]];
   }
 
-  // Assign shuffled middle players (includes lastPlayer now)
-  middlePlayers.forEach(p => {
+  rest.forEach(p => {
     const totalA = teamA.reduce((sum, x) => sum + x.score, 0);
     const totalB = teamB.reduce((sum, x) => sum + x.score, 0);
     if (teamA.length < scored.length / 2 && (totalA <= totalB || teamB.length >= scored.length / 2)) {
@@ -300,34 +310,12 @@
     }
   });
 
-  // Protect core players (no lastPlayer now)
-  const protectA = [player1.id, player4.id];
-  const protectB = [player2.id, player3.id];
-
-  while (teamA.length > scored.length / 2) {
-    const index = teamA.findLastIndex(p => !protectA.includes(p.id));
-    if (index === -1) break;
-    const moved = teamA.splice(index, 1)[0];
-    teamB.push(moved);
-  }
-
-  while (teamB.length > scored.length / 2) {
-    const index = teamB.findLastIndex(p => !protectB.includes(p.id));
-    if (index === -1) break;
-    const moved = teamB.splice(index, 1)[0];
-    teamA.push(moved);
-  }
-
+  // Sort teams by score descending
   teamA.sort((a, b) => b.score - a.score);
   teamB.sort((a, b) => b.score - a.score);
 
-
   const totalA = teamA.reduce((sum, p) => sum + p.score, 0);
   const totalB = teamB.reduce((sum, p) => sum + p.score, 0);
-
-
-  console.log("Team A:", teamA);
-  // console.log("Team B:", teamB);
 
   document.getElementById("teamAList").innerHTML = teamA.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
   document.getElementById("teamBList").innerHTML = teamB.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
@@ -337,8 +325,8 @@
 
   console.log("Team A:", teamA);
   console.log("Team B:", teamB);
-  console.log(teamA.length + ":" + teamB.length);
 }
+
 
  
     function renderPlayerList() {
