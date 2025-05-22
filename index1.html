@@ -258,7 +258,9 @@
       const [name, bat, bowl, field] = p.data;
       return (bat * weights.batsman + bowl * weights.bowler + field * weights.fielder).toFixed(2);
     }
-  function rebalanceTeams() {
+  
+  
+    function rebalanceTeams() {
   const selected = PLAYER_MASTER.filter(p => document.getElementById(p.id)?.checked);
   const scored = selected.map(p => ({
     ...p,
@@ -317,8 +319,16 @@
   const totalA = teamA.reduce((sum, p) => sum + p.score, 0);
   const totalB = teamB.reduce((sum, p) => sum + p.score, 0);
 
-  document.getElementById("teamAList").innerHTML = teamA.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
-  document.getElementById("teamBList").innerHTML = teamB.map(p => `<li>${p.data[0]} (${p.score})</li>`).join("");
+  document.getElementById("teamAList").innerHTML = teamA.map(p => {
+  const highlight = p.bowling >= 7 ? ' style="color:darkgreen; font-weight:bold;"' : "";
+  return `<li${highlight}>${p.data[0]} (${p.score})</li>`;
+}).join("");
+
+document.getElementById("teamBList").innerHTML = teamB.map(p => {
+  const highlight = p.bowling >= 7 ? ' style="color:darkgreen; font-weight:bold;"' : "";
+  return `<li${highlight}>${p.data[0]} (${p.score})</li>`;
+}).join("");
+
 
   document.getElementById("scoreA").textContent = totalA.toFixed(2);
   document.getElementById("scoreB").textContent = totalB.toFixed(2);
