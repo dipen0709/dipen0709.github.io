@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aristo Aalayam</title>
+  <link rel="icon" type="image/png" href="aristo.jpeg">
+
+  <style>
+    /* Universal box-sizing for consistent layout */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f7f7f7;
+      color: #333;
+    }
+
+    header {
+      background-color: #004080;
+      color: white;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex; /* Added for layout */
+      align-items: center; /* Vertically center items */
+      justify-content: space-between; /* Space out items */
+    }
+
+    nav {
+      background-color: #003366;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    nav a {
+      color: white;
+      padding: 1rem;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      background-color: #0055aa;
+      transform: translateY(-2px);
+    }
+
+    section {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #004080;
+      border-bottom: 2px solid #004080;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+    }
+
+    h3 {
+      color: #0055aa;
+      font-size: 1.2rem; /* Adjusted for smaller size */
+      margin-top: 1.5rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border: 1px solid #d0e0f0;
+    }
+
+    /* Smaller font size for strong tags within cards */
+    .card strong {
+        font-size: 0.95em; /* Slightly smaller than parent font size */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 0.85rem;
+      border: 1px solid #e0e0e0;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color: #004080;
+      font-weight: 600;
+    }
+
+    /* Bracket Specific Styles */
+    .bracket {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 20px;
+      margin: 0 -20px;
+      scrollbar-width: thin;
+      scrollbar-color: #004080 #f1f1f1;
+    }
+
+    /* Webkit scrollbar styles */
+    .bracket::-webkit-scrollbar {
+      height: 8px;
+    }
+    .bracket::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    .bracket::-webkit-scrollbar-thumb {
+      background: #004080;
+      border-radius: 10px;
+    }
+    .bracket::-webkit-scrollbar-thumb:hover {
+      background: #0055aa;
+    }
+
+    .round {
+      list-style: none;
+      padding: 0;
+      margin: 0 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      flex-shrink: 0;
+      min-width: 180px;
+    }
+
+    /* Ensure no bullets for match items */
+    .match {
+      list-style-type: none; /* Explicitly remove bullet points */
+      background: #fff;
+      border: 2px solid #004080;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      margin: 15px 0;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      min-width: 150px;
+      position: relative;
+      font-size: 0.9rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .match:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Specific background colors for match boxes as requested */
+    /* Round 1: P1 vs P2, P3 vs P4, etc. - Light Blue */
+    .round-1 .match {
+      background-color: #e6f7ff; /* Light Blue */
+    }
+
+    /* Round 2: W1 vs W2, W3 vs W4, etc. - Light Yellow */
+    .round-2 .match {
+      background-color: #fffae6; /* Light Yellow */
+    }
+
+    /* Quarter Finals (Round 3): QF1 & QF2 - Light Pink */
+    .round-3 .match {
+      background-color: #ffe6e6; /* Light Pink */
+    }
+
+    /* Semi Finals (Round 4): SF1 and SF2 - Light Green */
+    .round-4 .match {
+      background-color: #e6ffe6; /* Light Green */
+    }
+
+    /* Final (Round 5): Final Match - Light Green */
+    .final .match {
+      background-color: #e6ffe6; /* Light Green (same as semi-finals as requested) */
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #004080;
+      margin: auto;
+      align-self: center;
+      padding: 1rem 1.5rem;
+    }
+
+    .win1 {
+      font-weight: bold;
+      color: #008000;
+    }
+
+    .loser {
+      color: #a0a0a0;
+      text-decoration: line-through;
+    }
+
+    /* Bracket Lines - ALL REMOVED */
+    .round:not(.final) .match::before,
+    .round:not(.final) .match::after,
+    .round:not(.round-1) .match::before,
+    .final .match::before {
+        content: none;
+        display: none;
+    }
+
+    /* Adjust vertical spacing when lines are removed to maintain layout if needed */
+    .round:not(.final) .match:nth-child(odd),
+    .round:not(.final) .match:nth-child(even) {
+        margin-bottom: 15px;
+        margin-top: 15px;
+    }
+
+    .round {
+      align-items: flex-start;
+    }
+
+    /* Chess Rules Specific Styling */
+    .chess-rules-section .card ul {
+        list-style: disc; /* Use bullets for main rule points */
+        padding-left: 20px;
+    }
+    .chess-rules-section .card ul ul {
+        list-style: circle; /* Use circles for sub-points */
+        padding-left: 25px;
+        margin-top: 5px;
+    }
+    .chess-rules-section .card h3 {
+        color: #004080; /* Match main heading color for rule sub-sections */
+        border-bottom: 1px solid #a0c0e0;
+        padding-bottom: 0.3rem;
+        margin-bottom: 1rem;
+        font-size: 1.2rem; /* Adjusted for smaller size */
+    }
+    .chess-rules-section .card h4 {
+        color: #0055aa;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+    .chess-rules-section .card strong {
+        color: #003366; /* Stronger color for emphasis */
+    }
+
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 1024px) {
+      section {
+        padding: 1.5rem;
+      }
+      h2 {
+        font-size: 1.6rem;
+      }
+      h3 {
+        font-size: 1.1rem; /* Adjusted for smaller size in media query */
+      }
+      .match {
+        min-width: 120px;
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+      }
+      .round {
+        margin: 0 25px;
+      }
+       .card strong {
+        font-size: 0.9em; /* Further adjustment for smaller screens */
+      }
+    }
+
+    @media (max-width: 768px) {
+      nav a {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+      }
+      section {
+        padding: 1rem;
+      }
+      h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+      h3 {
+        font-size: 1rem; /* Adjusted for smaller size in media query */
+        margin-top: 1rem;
+      }
+      .card {
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+      table, th, td {
+        font-size: 0.85rem;
+        padding: 0.6rem;
+      }
+
+      /* Bracket specific adjustments for smaller screens */
+      .bracket {
+        padding: 10px;
+        margin: 0 -10px;
+      }
+      .round {
+        margin: 0 15px;
+        min-width: 100px;
+      }
+      .match {
+        min-width: 100px;
+        padding: 0.4rem 0.8rem;
+        margin: 10px 0;
+        font-size: 0.8rem;
+      }
+
+      /* Adjust vertical spacing for smaller screens */
+      .round:not(.final) .match:nth-child(odd),
+      .round:not(.final) .match:nth-child(even) {
+        margin-bottom: 10px;
+        margin-top: 10px;
+      }
+      .card strong {
+        font-size: 0.85em; /* Further adjustment for smaller screens */
+      }
+    }
+
+    @media (max-width: 480px) {
+        .match {
+            min-width: 90px;
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+        }
+        .round {
+            margin: 0 10px;
+        }
+        .bracket {
+            padding: 5px;
+            margin: 0 -5px;
+        }
+        .card strong {
+          font-size: 0.8em; /* Further adjustment for smaller screens */
+        }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="aristo.png" alt="Aristo Aalayam Sports Tournament Logo" style="max-width: 100px; height: auto; margin-right: 10px;"/>
+    <p>Sports Tournament 2025</p>
+  </header>
+
+  <nav>
+    <a href="#chess">Chess</a>
+    <a href="#badminton">Badminton</a>
+    <a href="#tt">Table Tennis</a>
+    <a href="#carrom">Carrom</a>
+  </nav>
+
+  <section id="chess" class="chess-rules-section">
+    <h2>♟ Chess</h2>
+    <div class="card">
+      <h3>Tournament Rules:</h3>
+      <ul>
+        <li>Standard knockout format with 32 players.</li>
+        <li>Each game is <strong>30 minutes</strong> per candidate.</li>
+        <li><strong>Touch to move:</strong> Once you touch a piece, you must move it if it's a legal move.</li>
+        <li><strong>Opponent may not speak "check"</strong> as per new rule.</li>
+        <li><strong>Illegal Move:</strong> 2 illegal moves allowed per game; on the 3rd illegal move, the player forfeits.</li>
+      </ul>
+
+      <h3>Piece Movements:</h3>
+      <ul>
+        <li>
+          <h4>Pawn</h4>
+          <ul>
+            <li>Moves forward one square.</li>
+            <li>On its first move, it can move two squares forward.</li>
+            <li>Cannot move backward.</li>
+          </ul>
+        </li>
+        <li>
+          <h4>Rook</h4>
+          <ul>
+            <li>Moves any number of squares horizontally or vertically.</li>
+          </ul>
+        </li>
+        <li>
+          <h4>Knight</h4>
+          <ul>
+            <li>Moves in an L-shape: two squares in one direction (horizontally or vertically) and then one square perpendicular.</li>
+            <li>Can jump over other pieces.</li>
+          </ul>
+        </li>
+        <li>
+          <h4>Bishop</h4>
+          <ul>
+            <li>Moves any number of squares diagonally.</li>
+          </ul>
+        </li>
+        <li>
+          <h4>Queen</h4>
+          <ul>
+            <li>Moves any number of squares vertically, horizontally, or diagonally.</li>
+          </ul>
+        </li>
+        <li>
+          <h4>King</h4>
+          <ul>
+            <li>Moves one square in any direction.</li>
+            <li>Special move: <strong>Castling</strong> (see below).</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>Special Move: Castling</h3>
+      <ul>
+        <li>A move involving the king and a rook.</li>
+        <li><strong>Conditions:</strong>
+          <ul>
+            <li>Neither the king nor the chosen rook has moved before in the game.</li>
+            <li>There are no pieces between the king and the rook.</li>
+            <li>The king is not currently in check, does not pass through any square attacked by an opponent's piece, and does not end up in check.</li>
+          </ul>
+        </li>
+        <li><strong>Execution:</strong> The king moves two squares toward the rook, and the rook moves to the square the king skipped over, placing it next to the king.</li>
+      </ul>
+
+      <h3>How the Game Ends:</h3>
+      <ul>
+        <li><strong>Checkmate:</strong> One player wins by placing the opponent's king in a position where it is under immediate attack (in check) and there is no legal way to remove the king from attack.</li>
+        <li><strong>Draw:</strong> A game can also end in a draw due to:
+          <ul>
+            <li><strong>Agreement</strong> between players.</li>
+            <li><strong>Insufficient material</strong> to checkmate (e.g., King and Knight vs. King).</li>
+            <li><strong>Stalemate</strong> (a player has no legal moves, but their king is not in check).</li>
+            <li><strong>Threefold repetition</strong> of the same position.</li>
+            <li>The <strong>fifty-move rule</strong> (no pawn has been moved and no capture has been made for fifty consecutive moves by both players).</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>Knockout Bracket:</h3>
+      <div class="bracket">
+        <ul class="round round-1">
+          <li class="match">P 1 vs P 2</li>
+          <li class="match">P 3 vs P 4</li>
+          <li class="match">P 5 vs P 6</li>
+          <li class="match">P 7 vs P 8</li>
+          <li class="match">P 9 vs P 10</li>
+          <li class="match">P 11 vs P 12</li>
+          <li class="match">P 13 vs P 14</li>
+          <li class="match">P 15 vs P 16</li>
+          <li class="match">P 17 vs P 18</li>
+          <li class="match">P 19 vs P 20</li>
+          <li class="match">P 21 vs P 22</li>
+          <li class="match">P 23 vs P 24</li>
+          <li class="match">P 25 vs P 26</li>
+          <li class="match">P 27 vs P 28</li>
+          <li class="match">P 29 vs P 30</li>
+          <li class="match">P 31 vs P 32</li>
+        </ul>
+
+        <ul class="round round-2">
+          <li class="match">Win1 1 vs Win1 2</li>
+          <li class="match">Win1 3 vs Win1 4</li>
+          <li class="match">Win1 5 vs Win1 6</li>
+          <li class="match">Win1 7 vs Win1 8</li>
+          <li class="match">Win1 9 vs Win1 10</li>
+          <li class="match">Win1 11 vs Win1 12</li>
+          <li class="match">Win1 13 vs Win1 14</li>
+          <li class="match">Win1 15 vs Win1 16</li>
+        </ul>
+
+        <ul class="round round-3">
+          <li class="match">QF 1: Win1 1 vs Win1 2</li>
+          <li class="match">QF 2: Win1 3 vs Win1 4</li>
+          <li class="match">QF 3: Win1 5 vs Win1 6</li>
+          <li class="match">QF 4: Win1 7 vs Win1 8</li>
+        </ul>
+
+        <ul class="round round-4">
+          <li class="match">SF 1: QF1 Win1 vs QF2 Win1</li>
+          <li class="match">SF 2: QF3 Win1 vs QF4 Win1</li>
+        </ul>
+
+        <ul class="round round-5 final">
+          <li class="match"><strong>🏆 Final: SF1 Win1 vs SF2 Win1</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="badminton">
+    <h2>🏸 Badminton</h2>
+    <div class="card">
+      <h3>Rules:</h3>
+      <ul>
+        <li>Singles and Doubles categories available.</li>
+        <li>Best of 3 games, 21 points each.</li>
+        <li>Standard knockout format.</li>
+      </ul>
+
+      <h3>Schedule:</h3>
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Date</th><th>Time</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Singles Rounds</td><td>6th June</td><td>9:00 AM</td></tr>
+          <tr><td>Doubles Rounds</td><td>7th June</td><td>9:00 AM</td></tr>
+          <tr><td>Finals</td><td>8th June</td><td>5:00 PM</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="tt">
+    <h2>🏓 Table Tennis</h2>
+    <div class="card">
+      <h3>Rules:</h3>
+      <ul>
+        <li>Best of 5 sets per match (11 points per set).</li>
+        <li>Knockout format with Singles & Doubles.</li>
+      </ul>
+
+      <h3>Schedule:</h3>
+      <table>
+        <thead>
+          <tr><th>Round</th><th>Date</th><th>Time</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Prelims</td><td>9th June</td><td>10:00 AM</td></tr>
+          <tr><td>Quarter Finals</td><td>10th June</td><td>10:00 AM</td></tr>
+          <tr><td>Semi Finals</td><td>11th June</td><td>11:00 AM</td></tr>
+          <tr><td>Final</td><td>12th June</td><td>5:00 PM</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="carrom">
+    <h2>🎯 Carrom</h2>
+    <div class="card">
+      <h3>Rules:</h3>
+      <ul>
+        <li>Singles and Doubles tournaments.</li>
+        <li>Best of 3 boards (25 points or 8 boards max).</li>
+        <li>Standard carrom rules apply.</li>
+      </ul>
+
+      <h3>Schedule:</h3>
+      <table>
+        <thead>
+          <tr><th>Event</th><th>Date</th><th>Time</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Singles</td><td>13th June</td><td>9:00 AM</td></tr>
+          <tr><td>Doubles</td><td>14th June</td><td>10:00 AM</td></tr>
+          <tr><td>Finals</td><td>15th June</td><td>5:00 PM</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</body>
+</html>
