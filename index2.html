@@ -17,7 +17,13 @@
       margin: 0;
       background: #f7f7f7;
       color: #333;
-      
+      /* The following flex properties are for sticky footer,
+         but were removed by the user in the previous iteration.
+         If you want the sticky footer, re-add them:
+         display: flex;
+         flex-direction: column;
+         min-height: 100vh;
+      */
     }
 
     header {
@@ -56,6 +62,8 @@
       padding: 2rem;
       max-width: 1200px;
       margin: auto;
+      /* If sticky footer is re-added to body, uncomment this: */
+      /* flex-grow: 1; */
     }
 
     h2 {
@@ -260,6 +268,60 @@
         color: #003366; /* Stronger color for emphasis */
     }
 
+    /* Badminton Rules Specific Styling (Similar to Chess) */
+    .badminton-rules-section .card ul {
+        list-style: disc; /* Use bullets for main rule points */
+        padding-left: 20px;
+    }
+    .badminton-rules-section .card ul ul {
+        list-style: circle; /* Use circles for sub-points */
+        padding-left: 25px;
+        margin-top: 5px;
+    }
+    .badminton-rules-section .card h3 {
+        color: #004080; /* Match main heading color for rule sub-sections */
+        border-bottom: 1px solid #a0c0e0;
+        padding-bottom: 0.3rem;
+        margin-bottom: 1rem;
+        font-size: 1.2rem; /* Adjusted for smaller size */
+    }
+    .badminton-rules-section .card h4 {
+        color: #0055aa;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+    .badminton-rules-section .card strong {
+        color: #003366; /* Stronger color for emphasis */
+    }
+
+    /* Carrom Rules Specific Styling (Similar to Chess/Badminton) */
+    .carrom-rules-section .card ul {
+        list-style: disc; /* Use bullets for main rule points */
+        padding-left: 20px;
+    }
+    .carrom-rules-section .card ul ul {
+        list-style: circle; /* Use circles for sub-points */
+        padding-left: 25px;
+        margin-top: 5px;
+    }
+    .carrom-rules-section .card h3 {
+        color: #004080; /* Match main heading color for rule sub-sections */
+        border-bottom: 1px solid #a0c0e0;
+        padding-bottom: 0.3rem;
+        margin-bottom: 1rem;
+        font-size: 1.2rem; /* Adjusted for smaller size */
+    }
+    .carrom-rules-section .card h4 {
+        color: #0055aa;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+    .carrom-rules-section .card strong {
+        color: #003366; /* Stronger color for emphasis */
+    }
+
 
      /* Footer Styles */
     footer {
@@ -386,7 +448,7 @@
     <div class="card">
       <h3>Tournament Rules:</h3>
       <ul>
-        <li>Standard knockout format with 32 players.</li>
+        <li>This is a knockout tournament where losers are eliminated.</li>
         <li>Each game is <strong>30 minutes</strong> per candidate.</li>
         <li><strong>Touch to move:</strong> Once you touch a piece, you must move it if it's a legal move.</li>
         <li><strong>Opponent may not speak "check"</strong> as per new rule.</li>
@@ -463,11 +525,22 @@
           </ul>
         </li>
       </ul>
+       <h3>Schedule:</h3>
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Date</th><th>Time</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Under 14 Rounds</td><td>26th May</td><td>9:00 AM</td></tr>
+          <tr><td>Above 14 Rounds</td><td>26th May</td><td>9:00 AM</td></tr>
+          <tr><td>Finals</td><td>DND</td><td>DND</td></tr>
+        </tbody>
+      </table>
 
       <h3>Knockout Bracket:</h3>
       <div class="bracket">
         <ul class="round round-1">
-          <li class="match">P 1 vs P 2</li>
+          <li class="match">Dipen (A-1004) vs Kiran (B-901)<br><small style="color: rgb(14, 14, 48);">Mon, 26th May - 9 to 10 pm</small></li>
           <li class="match">P 3 vs P 4</li>
           <li class="match">P 5 vs P 6</li>
           <li class="match">P 7 vs P 8</li>
@@ -515,14 +588,36 @@
     </div>
   </section>
 
-  <section id="badminton">
+  <section id="badminton" class="badminton-rules-section">
     <h2>🏸 Badminton</h2>
     <div class="card">
-      <h3>Rules:</h3>
+      <h3>Tournament Rules:</h3>
       <ul>
-        <li>Singles and Doubles categories available.</li>
-        <li>Best of 3 games, 21 points each.</li>
-        <li>Standard knockout format.</li>
+        <li>Only singles category is available.</li>
+        <li>This is a knockout tournament where losers are eliminated.</li>
+        <li>
+          <h4>General Matches:</h4>
+          <ul>
+            <li>1 Round per match.</li>
+            <li>15 points per round.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>Serving Rules:</h3>
+      <ul>
+        <li>Serve must be underhand and below the waist.</li>
+        <li>Server must stand inside the service box, with both feet on the ground.</li>
+        <li>The serve must go diagonally into the opponent’s service box.</li>
+      </ul>
+
+      <h3>Faults:</h3>
+      <ul>
+        <li>Shuttle lands outside the court boundaries.</li>
+        <li>Shuttle fails to pass over the net.</li>
+        <li>Player touches the net with their body or racket.</li>
+        <li>Hitting the shuttle twice or carrying it (scooping/slinging motion).</li>
+        <li>Shuttle is hit before it crosses to your side.</li>
       </ul>
 
       <h3>Schedule:</h3>
@@ -531,57 +626,132 @@
           <tr><th>Category</th><th>Date</th><th>Time</th></tr>
         </thead>
         <tbody>
-          <tr><td>Singles Rounds</td><td>6th June</td><td>9:00 AM</td></tr>
-          <tr><td>Doubles Rounds</td><td>7th June</td><td>9:00 AM</td></tr>
-          <tr><td>Finals</td><td>8th June</td><td>5:00 PM</td></tr>
+          <tr><td>Singles Female Rounds</td><td>26th May</td><td>9:00 AM</td></tr>
+          <tr><td>Singles Male Rounds</td><td>26th May</td><td>9:00 AM</td></tr>
+          <tr><td>Finals</td><td>DND</td><td>DND</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <section id="tt">
+  <section id="tt" class="chess-rules-section">
     <h2>🏓 Table Tennis</h2>
     <div class="card">
-      <h3>Rules:</h3>
+      <h3>Tournament Rules:</h3>
       <ul>
-        <li>Best of 5 sets per match (11 points per set).</li>
-        <li>Knockout format with Singles & Doubles.</li>
+        <li>This is a knockout tournament where losers are eliminated.</li>
+        <li>
+          <h4>General Matches:</h4>
+          <ul>
+            <li>1 Round per match.</li>
+            <li>15 points per round (5-5 service each).</li>
+          </ul>
+        </li>
+        <li>
+          <h4>Semi-Final and Final Matches:</h4>
+          <ul>
+            <li>Best of 3 Rounds.</li>
+            <li>15 points each Round.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>🟢 Scoring Points:</h3>
+      <ul>
+        <li>A point is scored when your opponent:
+          <ul>
+            <li>Fails to make a correct return.</li>
+            <li>Lets the ball bounce twice on their side.</li>
+            <li>Hits the ball into the net or off the table.</li>
+            <li>Strikes the ball before it bounces on their side (unless it’s going off the table and they volley it).</li>
+            <li>Fails to make a legal serve.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>🔁 Legal Return:</h3>
+      <ul>
+        <li>The ball must bounce once on your side.</li>
+        <li>You must hit it after the bounce, and it must pass over or around the net and land on your opponent’s side.</li>
+      </ul>
+
+      <h3>Invalid Serve (Let):</h3>
+      <ul>
+        <li>If the ball touches the net on the serve but still lands correctly, no point is awarded; the serve is replayed.</li>
       </ul>
 
       <h3>Schedule:</h3>
       <table>
         <thead>
-          <tr><th>Round</th><th>Date</th><th>Time</th></tr>
+          <tr><th>Category</th><th>Date</th><th>Time</th></tr>
         </thead>
         <tbody>
-          <tr><td>Prelims</td><td>9th June</td><td>10:00 AM</td></tr>
-          <tr><td>Quarter Finals</td><td>10th June</td><td>10:00 AM</td></tr>
-          <tr><td>Semi Finals</td><td>11th June</td><td>11:00 AM</td></tr>
-          <tr><td>Final</td><td>12th June</td><td>5:00 PM</td></tr>
+          <tr><td>Singles Female Rounds</td><td>26th May</td><td>9:00 AM</td></tr>
+          <tr><td>Singles Male Rounds</td><td>26th May</td><td>9:00 AM</td></tr>
+          <tr><td>Finals</td><td>DND</td><td>DND</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <section id="carrom">
+  <section id="carrom" class="carrom-rules-section">
     <h2>🎯 Carrom</h2>
     <div class="card">
-      <h3>Rules:</h3>
+      <h3>Tournament Rules:</h3>
       <ul>
-        <li>Singles and Doubles tournaments.</li>
-        <li>Best of 3 boards (25 points or 8 boards max).</li>
+        <li>This is a knockout tournament where losers are eliminated.</li>
         <li>Standard carrom rules apply.</li>
       </ul>
 
+      <h3>Game Play:</h3>
+      <ul>
+        <li>
+          <h4>Coin Assignment:</h4>
+          <ul>
+            <li>One team takes white coins, the other takes black coins.</li>
+          </ul>
+        </li>
+        <li>
+          <h4>Breaking (First Shot):</h4>
+          <ul>
+            <li>Decided by a coin toss or mutual agreement.</li>
+            <li>The striker must be placed on or behind the baseline.</li>
+          </ul>
+        </li>
+        <li>
+          <h4>Turn Rules:</h4>
+          <ul>
+            <li>Players take alternate turns.</li>
+            <li>If a coin is pocketed, the player continues their turn.</li>
+            <li>A foul (e.g., pocketing the striker or an opponent’s coin) ends the turn and usually results in a penalty.</li>
+          </ul>
+        </li>
+        <li>
+          <h4>Queen Rules:</h4>
+          <ul>
+            <li>The queen can be pocketed only after you have pocketed at least one of your own coins.</li>
+            <li>You must “cover” the queen by pocketing one of your own coins in the same or next turn. If you fail to cover it, the queen is returned to the center.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>🧮 Scoring:</h3>
+      <ul>
+        <li>The game ends when one player pockets all their coins and the queen is either already covered or cannot be covered, or after 30 minutes of play.</li>
+        <li>10 points for each black coin.</li>
+        <li>20 points for each white coin.</li>
+        <li>50 points for the queen.</li>
+      </ul>
+
       <h3>Schedule:</h3>
       <table>
         <thead>
-          <tr><th>Event</th><th>Date</th><th>Time</th></tr>
+          <tr><th>Category</th><th>Date</th><th>Time</th></tr>
         </thead>
         <tbody>
-          <tr><td>Singles</td><td>13th June</td><td>9:00 AM</td></tr>
-          <tr><td>Doubles</td><td>14th June</td><td>10:00 AM</td></tr>
-          <tr><td>Finals</td><td>15th June</td><td>5:00 PM</td></tr>
+          <tr><td>Doubles Female Rounds</td><td>27th May</td><td>9:00 AM</td></tr>
+          <tr><td>Doubles Male Rounds</td><td>27th May</td><td>9:00 AM</td></tr>
+          <tr><td>Finals</td><td>DND</td><td>DND</td></tr>
         </tbody>
       </table>
     </div>
